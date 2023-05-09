@@ -21,5 +21,10 @@ namespace Piano_UI
         {
 
         }
+
+        public string GetName()
+        {
+            return popupSongName.Text;
+        }
     }
 }

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             label1 = new Label();
-            textBox1 = new TextBox();
-            button1 = new Button();
-            button2 = new Button();
+            popupSongName = new TextBox();
+            OK = new Button();
+            CANCEL = new Button();
             SuspendLayout();
             // 
             // label1
@@ -45,41 +45,43 @@
             label1.Text = "Enter a Name for your Song";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // textBox1
+            // popupSongName
             // 
-            textBox1.Location = new Point(12, 44);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(242, 23);
-            textBox1.TabIndex = 1;
+            popupSongName.Location = new Point(12, 44);
+            popupSongName.Name = "popupSongName";
+            popupSongName.Size = new Size(242, 23);
+            popupSongName.TabIndex = 1;
             // 
-            // button1
+            // OK
             // 
-            button1.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            button1.Location = new Point(12, 89);
-            button1.Name = "button1";
-            button1.Size = new Size(114, 59);
-            button1.TabIndex = 2;
-            button1.Text = "OK";
-            button1.UseVisualStyleBackColor = true;
+            OK.DialogResult = DialogResult.OK;
+            OK.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            OK.Location = new Point(12, 89);
+            OK.Name = "OK";
+            OK.Size = new Size(114, 59);
+            OK.TabIndex = 2;
+            OK.Text = "OK";
+            OK.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // CANCEL
             // 
-            button2.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            button2.Location = new Point(142, 89);
-            button2.Name = "button2";
-            button2.Size = new Size(112, 59);
-            button2.TabIndex = 3;
-            button2.Text = "CANCEL";
-            button2.UseVisualStyleBackColor = true;
+            CANCEL.DialogResult = DialogResult.Cancel;
+            CANCEL.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            CANCEL.Location = new Point(142, 89);
+            CANCEL.Name = "CANCEL";
+            CANCEL.Size = new Size(112, 59);
+            CANCEL.TabIndex = 3;
+            CANCEL.Text = "CANCEL";
+            CANCEL.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(266, 160);
-            Controls.Add(button2);
-            Controls.Add(button1);
-            Controls.Add(textBox1);
+            Controls.Add(CANCEL);
+            Controls.Add(OK);
+            Controls.Add(popupSongName);
             Controls.Add(label1);
             Name = "Form2";
             Text = "Song Name";
@@ -91,8 +93,8 @@
         #endregion
 
         private Label label1;
-        private TextBox textBox1;
-        private Button button1;
-        private Button button2;
+        private TextBox popupSongName;
+        private Button OK;
+        private Button CANCEL;
     }
 }

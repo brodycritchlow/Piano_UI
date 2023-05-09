@@ -74,6 +74,7 @@
             button33 = new Button();
             checkBox1 = new CheckBox();
             timerMetronome = new System.Windows.Forms.Timer(components);
+            button34 = new Button();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             SuspendLayout();
             // 
@@ -98,39 +99,43 @@
             playlist_entry.Name = "playlist_entry";
             playlist_entry.Size = new Size(249, 29);
             playlist_entry.TabIndex = 1;
+            playlist_entry.SelectedIndexChanged += playlist_entry_SelectedIndexChanged;
             // 
             // load
             // 
             load.FlatStyle = FlatStyle.Flat;
             load.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            load.Location = new Point(13, 71);
+            load.Location = new Point(141, 71);
             load.Name = "load";
             load.Size = new Size(129, 36);
             load.TabIndex = 2;
             load.Text = "Load Playlist";
             load.UseVisualStyleBackColor = true;
+            load.Click += load_Click;
             // 
             // save
             // 
             save.FlatStyle = FlatStyle.Flat;
             save.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            save.Location = new Point(148, 71);
+            save.Location = new Point(141, 113);
             save.Name = "save";
             save.Size = new Size(129, 36);
             save.TabIndex = 3;
             save.Text = "Save Playlist";
             save.UseVisualStyleBackColor = true;
+            save.Click += save_Click;
             // 
             // Clear
             // 
             Clear.FlatStyle = FlatStyle.Flat;
             Clear.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            Clear.Location = new Point(283, 71);
+            Clear.Location = new Point(9, 113);
             Clear.Name = "Clear";
             Clear.Size = new Size(129, 36);
             Clear.TabIndex = 4;
             Clear.Text = "Clear Playlist";
             Clear.UseVisualStyleBackColor = true;
+            Clear.Click += Clear_Click;
             // 
             // button1
             // 
@@ -250,10 +255,12 @@
             // trackBar1
             // 
             trackBar1.Location = new Point(655, 101);
-            trackBar1.Maximum = 300;
+            trackBar1.Maximum = 240;
+            trackBar1.Minimum = 20;
             trackBar1.Name = "trackBar1";
             trackBar1.Size = new Size(232, 45);
             trackBar1.TabIndex = 13;
+            trackBar1.Value = 20;
             trackBar1.Scroll += trackBar1_Scroll;
             trackBar1.ValueChanged += trackBar1_ValueChanged;
             // 
@@ -720,10 +727,23 @@
             timerMetronome.Interval = 55;
             timerMetronome.Tick += timerMetronome_Tick;
             // 
+            // button34
+            // 
+            button34.FlatStyle = FlatStyle.Flat;
+            button34.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            button34.Location = new Point(9, 71);
+            button34.Name = "button34";
+            button34.Size = new Size(129, 36);
+            button34.TabIndex = 44;
+            button34.Text = "New Song";
+            button34.UseVisualStyleBackColor = true;
+            button34.Click += button34_Click;
+            // 
             // Form1
             // 
             BackColor = Color.White;
             ClientSize = new Size(1320, 538);
+            Controls.Add(button34);
             Controls.Add(checkBox1);
             Controls.Add(button33);
             Controls.Add(button32);
@@ -824,5 +844,6 @@
         private Button button33;
         private CheckBox checkBox1;
         private System.Windows.Forms.Timer timerMetronome;
+        private Button button34;
     }
 }

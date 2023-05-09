@@ -26,6 +26,7 @@ namespace Piano_UI
 
         static Dictionary<char, int> durations = new Dictionary<char, int>
         {
+            {'0', 0},
             {'s', 2},
             {'e', 4},
             {'q', 8},
@@ -182,7 +183,14 @@ namespace Piano_UI
                 {
                     nd.streamIndex = -999;
                 }
-                nd.tickTime = durations[song[i + 2]];
+                if (song[i+2] == 0)
+                {
+                    nd.tickTime = 0;
+                }
+                else { 
+                    nd.tickTime = durations[song[i + 2]];  
+                }
+
                 noteQueue.Add(nd);
             }
         }
@@ -199,6 +207,12 @@ namespace Piano_UI
 
             if (editMode_On)
             {
+                if (playlist.Count == 0)
+                {
+                    button34_Click(sender, e);
+                    if (playlist.Count == 0) return;
+                }
+
                 if (recordMode_On)
                 {
                     recordMode_On = false;
@@ -220,6 +234,12 @@ namespace Piano_UI
 
             if (recordMode_On)
             {
+                if (playlist.Count == 0)
+                {
+                    button34_Click(sender, e);
+                    if (playlist.Count == 0) return;
+                }
+
                 if (editMode_On)
                 {
                     editMode_On = false;
@@ -237,6 +257,20 @@ namespace Piano_UI
         private void button1_Click(object sender, EventArgs e)
         {
             // back
+            if (playlist_entry.Items.Count > 0)
+            {
+                playlistIndex += playlist_entry.Items.Count - 1 % playlist_entry.Items.Count;
+            }
+
+            if (noteQueue.Count > 0)
+            {
+                // dencrement playlistIndex by adding the number of items - 1
+                
+                // mod(%) the result by the number of items  in the comboBox
+                UpdatePlaylist();
+                SongEntry.Text = playlist[playlist_entry.GetItemText(playlist_entry.Items[playlist_entry.SelectedIndex])];
+                StringToQueue("R4q" + SongEntry.Text);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -248,16 +282,33 @@ namespace Piano_UI
         private void button3_Click(object sender, EventArgs e)
         {
             // stop
+            noteQueue.Clear();
+            soundOut.Stop();
+            metronomeTick = 0;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             // forward
+            if (playlist_entry.Items.Count > 1)
+            {
+                playlistIndex += 1 % playlist_entry.Items.Count;
+            }
+
+            if (noteQueue.Count > 0)
+            {
+                // increment playlistIndex, but mod(%) the result by the number of items in the comboBox
+                
+                UpdatePlaylist();
+                SongEntry.Text = playlist[playlist_entry.GetItemText(playlist_entry.Items[playlist_entry.SelectedIndex])];
+                StringToQueue("R4q" + SongEntry.Text);
+            }
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
             // X
+            SongEntry.Text = "";
         }
 
         private void button9_Click(object sender, EventArgs e)
@@ -473,7 +524,10 @@ namespace Piano_UI
 
         private void SongEntry_TextChanged(object sender, EventArgs e)
         {
-
+            if (playlist.Count > 0)
+            {
+                playlist[playlist_entry.GetItemText(playlist_entry.Items[playlist_entry.SelectedIndex])] = SongEntry.Text;
+            }
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -537,7 +591,7 @@ namespace Piano_UI
                     {
                         soundOut = noteWav[noteQueue[0].streamIndex + (oddeven ? 31 : 0)]; // C5 tries to index NoteWav with 26
                         soundOut.Play();
-                        
+
                     }
                     metronomeTick = noteQueue[0].tickTime;
                     noteQueue.RemoveAt(0);
@@ -1125,6 +1179,127 @@ namespace Piano_UI
         {
             // rest
             WriteNote("r0");
+        }
+
+        private void button34_Click(object sender, EventArgs e)
+        {
+            Form2 nameBox = new Form2();
+
+            if (nameBox.ShowDialog(this) == DialogResult.OK)
+            {
+                noteQueue.Clear();
+                soundOut.Stop();
+                metronomeTick = 0;
+                playlistIndex = playlist.Count;
+                AddToPlaylist(nameBox.GetName() + "::");
+                playlist_entry.SelectedIndex = playlistIndex;
+            }
+            nameBox.Dispose();
+        }
+
+        private void AddToPlaylist(string songEntry)
+        {
+            if (songEntry == null || songEntry == string.Empty || songEntry.IndexOf("::") < 0)
+            {
+                return;
+            }
+            playlist.Add(songEntry.Remove(songEntry.IndexOf("::")), songEntry.Substring(songEntry.IndexOf("::") + 2));
+            UpdatePlaylist();
+        }
+
+        private void UpdatePlaylist()
+        {
+            playlist_entry.Items.Clear();
+            foreach (var song in playlist)
+            {
+                playlist_entry.Items.Add(song.Key);
+            }
+            if (playlistIndex > playlist_entry.Items.Count || playlist_entry.Items.Count == 0)
+            {
+                playlistIndex = playlist_entry.Items.Count - 1;
+            }
+            playlist_entry.SelectedIndex = playlistIndex;
+            if (playlistIndex < 0)
+            {
+                playlist_entry.Text = string.Empty;
+                SongEntry.Text = "";
+            }
+            else
+            {
+                SongEntry.Text = playlist[playlist_entry.GetItemText(playlist_entry.Items[playlist_entry.SelectedIndex])];
+            }
+        }
+
+        private void load_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = "D:\\";
+                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"; openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    playlist.Clear();
+                    // Read file using StreamReader. Reads file line by line
+                    using (StreamReader file = new StreamReader(openFileDialog.FileName))
+                    {
+                        string ln;
+                        while ((ln = file.ReadLine()) != null)
+                        {
+                            AddToPlaylist(ln);
+                        }
+                        file.Close();
+                    }
+                    playlistIndex = 0;
+                    playlist_entry.SelectedIndex = playlistIndex;
+                }
+            }
+        }
+
+        private void save_Click(object sender, EventArgs e)
+        {
+            if (playlist.Count == 0) return;
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.InitialDirectory = "D:\\";
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName))
+                {
+                    foreach (var song in playlist)
+                    {
+                        writer.WriteLine(song.Key + "::" + song.Value);
+                    }
+                }
+            }
+        }
+
+        private void Clear_Click(object sender, EventArgs e)
+        {
+            noteQueue.Clear();
+            soundOut.Stop();
+            metronomeTick = 0;
+            playlist.Clear();
+            UpdatePlaylist();
+            SongEntry.Text = "";
+        }
+
+        private void playlist_entry_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            button3_Click(sender, e);
+            playlistIndex = playlist_entry.SelectedIndex;
+            if (playlistIndex < 0)
+            {
+                SongEntry.Text = "";
+            }
+            else
+            {
+                SongEntry.Text = playlist[playlist_entry.GetItemText(playlist_entry.Items[playlist_entry.SelectedIndex])];
+            }
         }
     }
 }
