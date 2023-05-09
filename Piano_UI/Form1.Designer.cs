@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             current_playlist_label = new Label();
             playlist_entry = new ComboBox();
             load = new Button();
@@ -72,6 +73,7 @@
             button32 = new Button();
             button33 = new Button();
             checkBox1 = new CheckBox();
+            timerMetronome = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             SuspendLayout();
             // 
@@ -275,6 +277,7 @@
             button8.TabIndex = 15;
             button8.Text = "Add Rest";
             button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
             // 
             // label3
             // 
@@ -326,6 +329,8 @@
             button10.TextAlign = ContentAlignment.BottomCenter;
             button10.UseVisualStyleBackColor = false;
             button10.Click += button10_Click;
+            button10.MouseDown += button10_MouseDown;
+            button10.MouseUp += button10_MouseUp;
             // 
             // button11
             // 
@@ -341,6 +346,8 @@
             button11.TextAlign = ContentAlignment.BottomCenter;
             button11.UseVisualStyleBackColor = false;
             button11.Click += button11_Click;
+            button11.MouseDown += button11_MouseDown;
+            button11.MouseUp += button11_MouseUp;
             // 
             // button12
             // 
@@ -356,6 +363,8 @@
             button12.TextAlign = ContentAlignment.BottomCenter;
             button12.UseVisualStyleBackColor = false;
             button12.Click += button12_Click;
+            button12.MouseDown += button12_MouseDown;
+            button12.MouseUp += button12_MouseUp;
             // 
             // button13
             // 
@@ -371,6 +380,8 @@
             button13.TextAlign = ContentAlignment.BottomCenter;
             button13.UseVisualStyleBackColor = false;
             button13.Click += button13_Click;
+            button13.MouseDown += button13_MouseDown;
+            button13.MouseUp += button13_MouseUp;
             // 
             // button14
             // 
@@ -386,6 +397,8 @@
             button14.TextAlign = ContentAlignment.BottomCenter;
             button14.UseVisualStyleBackColor = false;
             button14.Click += button14_Click;
+            button14.MouseDown += button14_MouseDown;
+            button14.MouseUp += button14_MouseUp;
             // 
             // button15
             // 
@@ -401,6 +414,8 @@
             button15.TextAlign = ContentAlignment.BottomCenter;
             button15.UseVisualStyleBackColor = false;
             button15.Click += button15_Click;
+            button15.MouseDown += button15_MouseDown;
+            button15.MouseUp += button15_MouseUp;
             // 
             // button16
             // 
@@ -416,6 +431,8 @@
             button16.TextAlign = ContentAlignment.BottomCenter;
             button16.UseVisualStyleBackColor = false;
             button16.Click += button16_Click;
+            button16.MouseDown += button16_MouseDown;
+            button16.MouseUp += button16_MouseUp;
             // 
             // button17
             // 
@@ -431,6 +448,8 @@
             button17.TextAlign = ContentAlignment.BottomCenter;
             button17.UseVisualStyleBackColor = false;
             button17.Click += button17_Click;
+            button17.MouseDown += button17_MouseDown;
+            button17.MouseUp += button17_MouseUp;
             // 
             // button18
             // 
@@ -446,6 +465,8 @@
             button18.TextAlign = ContentAlignment.BottomCenter;
             button18.UseVisualStyleBackColor = false;
             button18.Click += button18_Click;
+            button18.MouseDown += button18_MouseDown;
+            button18.MouseUp += button18_MouseUp;
             // 
             // button19
             // 
@@ -461,6 +482,8 @@
             button19.TextAlign = ContentAlignment.BottomCenter;
             button19.UseVisualStyleBackColor = false;
             button19.Click += button19_Click;
+            button19.MouseDown += button19_MouseDown;
+            button19.MouseUp += button19_MouseUp;
             // 
             // button20
             // 
@@ -476,6 +499,8 @@
             button20.TextAlign = ContentAlignment.BottomCenter;
             button20.UseVisualStyleBackColor = false;
             button20.Click += button20_Click;
+            button20.MouseDown += button20_MouseDown;
+            button20.MouseUp += button20_MouseUp;
             // 
             // button21
             // 
@@ -491,6 +516,8 @@
             button21.TextAlign = ContentAlignment.BottomCenter;
             button21.UseVisualStyleBackColor = false;
             button21.Click += button21_Click;
+            button21.MouseDown += button21_MouseDown;
+            button21.MouseUp += button21_MouseUp;
             // 
             // button22
             // 
@@ -506,6 +533,8 @@
             button22.TextAlign = ContentAlignment.BottomCenter;
             button22.UseVisualStyleBackColor = false;
             button22.Click += button22_Click;
+            button22.MouseDown += button22_MouseDown;
+            button22.MouseUp += button22_MouseUp;
             // 
             // button23
             // 
@@ -521,6 +550,8 @@
             button23.TextAlign = ContentAlignment.BottomCenter;
             button23.UseVisualStyleBackColor = false;
             button23.Click += button23_Click;
+            button23.MouseDown += button23_MouseDown;
+            button23.MouseUp += button23_MouseUp;
             // 
             // button24
             // 
@@ -534,6 +565,8 @@
             button24.Text = "  ";
             button24.UseVisualStyleBackColor = false;
             button24.Click += button24_Click;
+            button24.MouseDown += button24_MouseDown;
+            button24.MouseUp += button24_MouseUp;
             // 
             // button25
             // 
@@ -547,6 +580,8 @@
             button25.Text = "  ";
             button25.UseVisualStyleBackColor = false;
             button25.Click += button25_Click;
+            button25.MouseDown += button25_MouseDown;
+            button25.MouseUp += button25_MouseUp;
             // 
             // button26
             // 
@@ -560,6 +595,8 @@
             button26.Text = "  ";
             button26.UseVisualStyleBackColor = false;
             button26.Click += button26_Click;
+            button26.MouseDown += button26_MouseDown;
+            button26.MouseUp += button26_MouseUp;
             // 
             // button27
             // 
@@ -573,6 +610,8 @@
             button27.Text = "  ";
             button27.UseVisualStyleBackColor = false;
             button27.Click += button27_Click;
+            button27.MouseDown += button27_MouseDown;
+            button27.MouseUp += button27_MouseUp;
             // 
             // button28
             // 
@@ -586,6 +625,8 @@
             button28.Text = "  ";
             button28.UseVisualStyleBackColor = false;
             button28.Click += button28_Click;
+            button28.MouseDown += button28_MouseDown;
+            button28.MouseUp += button28_MouseUp;
             // 
             // button29
             // 
@@ -599,6 +640,8 @@
             button29.Text = "  ";
             button29.UseVisualStyleBackColor = false;
             button29.Click += button29_Click;
+            button29.MouseDown += button29_MouseDown;
+            button29.MouseUp += button29_MouseUp;
             // 
             // button30
             // 
@@ -612,6 +655,8 @@
             button30.Text = "  ";
             button30.UseVisualStyleBackColor = false;
             button30.Click += button30_Click;
+            button30.MouseDown += button30_MouseDown;
+            button30.MouseUp += button30_MouseUp;
             // 
             // button31
             // 
@@ -625,6 +670,8 @@
             button31.Text = "  ";
             button31.UseVisualStyleBackColor = false;
             button31.Click += button31_Click;
+            button31.MouseDown += button31_MouseDown;
+            button31.MouseUp += button31_MouseUp;
             // 
             // button32
             // 
@@ -638,6 +685,8 @@
             button32.Text = "  ";
             button32.UseVisualStyleBackColor = false;
             button32.Click += button32_Click;
+            button32.MouseDown += button32_MouseDown;
+            button32.MouseUp += button32_MouseUp;
             // 
             // button33
             // 
@@ -651,6 +700,8 @@
             button33.Text = "  ";
             button33.UseVisualStyleBackColor = false;
             button33.Click += button33_Click;
+            button33.MouseDown += button33_MouseDown;
+            button33.MouseUp += button33_MouseUp;
             // 
             // checkBox1
             // 
@@ -662,6 +713,12 @@
             checkBox1.Text = "Use tempo";
             checkBox1.UseVisualStyleBackColor = true;
             checkBox1.CheckedChanged += checkBox1_CheckedChanged;
+            // 
+            // timerMetronome
+            // 
+            timerMetronome.Enabled = true;
+            timerMetronome.Interval = 55;
+            timerMetronome.Tick += timerMetronome_Tick;
             // 
             // Form1
             // 
@@ -766,5 +823,6 @@
         private Button button32;
         private Button button33;
         private CheckBox checkBox1;
+        private System.Windows.Forms.Timer timerMetronome;
     }
 }

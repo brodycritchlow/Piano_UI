@@ -1,5 +1,6 @@
 using System.Media;
 using System.Security.Cryptography.X509Certificates;
+using System;
 
 namespace Piano_UI
 {
@@ -39,10 +40,16 @@ namespace Piano_UI
 
         bool editMode_On = false;
         bool recordMode_On = false;
+        bool oddeven = false;
+
+        int metronomeTick = 0;
 
         public long startTickCount = 0;
 
         private string[] noteDurationStrings = new string[10] { "s ", "e ", "q ", "h ", "w ", "S ", "E ", "Q ", "H ", "W " };
+
+        Dictionary<string, string> playlist = new Dictionary<string, string>();
+        int playlistIndex = 0;
 
         List<SoundPlayer> noteWav = new List<SoundPlayer>()
         {
@@ -50,27 +57,68 @@ namespace Piano_UI
             new SoundPlayer(Piano_UI.Properties.Resources.A4_),   // 1
             new SoundPlayer(Piano_UI.Properties.Resources.B4),    // 2
             new SoundPlayer(Piano_UI.Properties.Resources.C4),    // 3
-            new SoundPlayer(Piano_UI.Properties.Resources.C4_),   // 4
-            new SoundPlayer(Piano_UI.Properties.Resources.D4),    // 5
-            new SoundPlayer(Piano_UI.Properties.Resources.D4_),   // 6
-            new SoundPlayer(Piano_UI.Properties.Resources.E4),    // 7
-            new SoundPlayer(Piano_UI.Properties.Resources.F4),    // 8
-            new SoundPlayer(Piano_UI.Properties.Resources.F4_),   // 9
-            new SoundPlayer(Piano_UI.Properties.Resources.G4),    // 10
-            new SoundPlayer(Piano_UI.Properties.Resources.G4_),   // 11
-            new SoundPlayer(Piano_UI.Properties.Resources.A5),    // 12
-            new SoundPlayer(Piano_UI.Properties.Resources.A5_),   // 13
-            new SoundPlayer(Piano_UI.Properties.Resources.B5),    // 14
-            new SoundPlayer(Piano_UI.Properties.Resources.C5),    // 15
-            new SoundPlayer(Piano_UI.Properties.Resources.C5_),   // 16
-            new SoundPlayer(Piano_UI.Properties.Resources.D5),    // 17
-            new SoundPlayer(Piano_UI.Properties.Resources.D5_),   // 18
-            new SoundPlayer(Piano_UI.Properties.Resources.E5),    // 19
-            new SoundPlayer(Piano_UI.Properties.Resources.F5),    // 20
-            new SoundPlayer(Piano_UI.Properties.Resources.F5_),   // 21
-            new SoundPlayer(Piano_UI.Properties.Resources.G5),    // 22
-            new SoundPlayer(Piano_UI.Properties.Resources.G5_),   // 23
-            new SoundPlayer(Piano_UI.Properties.Resources.C6)     // 24
+            new SoundPlayer(Piano_UI.Properties.Resources.C4),    // 4
+            new SoundPlayer(Piano_UI.Properties.Resources.C4_),   // 5
+            new SoundPlayer(Piano_UI.Properties.Resources.D4),    // 6
+            new SoundPlayer(Piano_UI.Properties.Resources.D4_),   // 7
+            new SoundPlayer(Piano_UI.Properties.Resources.E4),    // 8
+            new SoundPlayer(Piano_UI.Properties.Resources.F4),    // 9
+            new SoundPlayer(Piano_UI.Properties.Resources.F4),    // 10
+            new SoundPlayer(Piano_UI.Properties.Resources.F4_),   // 11
+            new SoundPlayer(Piano_UI.Properties.Resources.G4),    // 12
+            new SoundPlayer(Piano_UI.Properties.Resources.G4_),   // 13
+            new SoundPlayer(Piano_UI.Properties.Resources.A5),    // 14
+            new SoundPlayer(Piano_UI.Properties.Resources.A5_),   // 15
+            new SoundPlayer(Piano_UI.Properties.Resources.B5),    // 16
+            new SoundPlayer(Piano_UI.Properties.Resources.C5),    // 17
+            new SoundPlayer(Piano_UI.Properties.Resources.C5),    // 18
+            new SoundPlayer(Piano_UI.Properties.Resources.C5_),   // 19
+            new SoundPlayer(Piano_UI.Properties.Resources.D5),    // 20
+            new SoundPlayer(Piano_UI.Properties.Resources.D5_),   // 21
+            new SoundPlayer(Piano_UI.Properties.Resources.E5),    // 22
+            new SoundPlayer(Piano_UI.Properties.Resources.F5),    // 23
+            new SoundPlayer(Piano_UI.Properties.Resources.F5),    // 24
+            new SoundPlayer(Piano_UI.Properties.Resources.F5_),   // 25
+            new SoundPlayer(Piano_UI.Properties.Resources.G5),    // 26
+            new SoundPlayer(Piano_UI.Properties.Resources.G5_),   // 27
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 28
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 29
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 30
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 31
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 32
+            new SoundPlayer(Piano_UI.Properties.Resources.A4),    // 0
+            new SoundPlayer(Piano_UI.Properties.Resources.A4_),   // 1
+            new SoundPlayer(Piano_UI.Properties.Resources.B4),    // 2
+            new SoundPlayer(Piano_UI.Properties.Resources.C4),    // 3
+            new SoundPlayer(Piano_UI.Properties.Resources.C4),    // 4
+            new SoundPlayer(Piano_UI.Properties.Resources.C4_),   // 5
+            new SoundPlayer(Piano_UI.Properties.Resources.D4),    // 6
+            new SoundPlayer(Piano_UI.Properties.Resources.D4_),   // 7
+            new SoundPlayer(Piano_UI.Properties.Resources.E4),    // 8
+            new SoundPlayer(Piano_UI.Properties.Resources.F4),    // 9
+            new SoundPlayer(Piano_UI.Properties.Resources.F4),    // 10
+            new SoundPlayer(Piano_UI.Properties.Resources.F4_),   // 11
+            new SoundPlayer(Piano_UI.Properties.Resources.G4),    // 12
+            new SoundPlayer(Piano_UI.Properties.Resources.G4_),   // 13
+            new SoundPlayer(Piano_UI.Properties.Resources.A5),    // 14
+            new SoundPlayer(Piano_UI.Properties.Resources.A5_),   // 15
+            new SoundPlayer(Piano_UI.Properties.Resources.B5),    // 16
+            new SoundPlayer(Piano_UI.Properties.Resources.C5),    // 17
+            new SoundPlayer(Piano_UI.Properties.Resources.C5),    // 18
+            new SoundPlayer(Piano_UI.Properties.Resources.C5_),   // 19
+            new SoundPlayer(Piano_UI.Properties.Resources.D5),    // 20
+            new SoundPlayer(Piano_UI.Properties.Resources.D5_),   // 21
+            new SoundPlayer(Piano_UI.Properties.Resources.E5),    // 22
+            new SoundPlayer(Piano_UI.Properties.Resources.F5),    // 23
+            new SoundPlayer(Piano_UI.Properties.Resources.F5),    // 24
+            new SoundPlayer(Piano_UI.Properties.Resources.F5_),   // 25
+            new SoundPlayer(Piano_UI.Properties.Resources.G5),    // 26
+            new SoundPlayer(Piano_UI.Properties.Resources.G5_),   // 27
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 28
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 29
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 30
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 31
+            new SoundPlayer(Piano_UI.Properties.Resources.C6),    // 32
         };
 
         SoundPlayer soundOut = new SoundPlayer(Piano_UI.Properties.Resources.C4);
@@ -109,7 +157,7 @@ namespace Piano_UI
 
             if (clearQueue)
             {
-                noteeQueue.Clear();
+                noteQueue.Clear();
             }
 
             for (int i = 0; i < song.Length; i += 4)
@@ -122,12 +170,12 @@ namespace Piano_UI
                 }
                 if (song[i] >= 'a' && song[i] <= 'g')
                 {
-                    nd.streamIndex = (song[i] - 'a') + 7 * octave;
+                    nd.streamIndex = (song[i] - 'a') * 2 + 14 * octave;
                     int.TryParse(song.Substring(i, 3), out newTempo);
                 }
                 else if (song[i] >= 'A' && song[i] <= 'G')
                 {
-                    nd.streamIndex = (song[i] - 'A') + 7 * octave;
+                    nd.streamIndex = (song[i] - 'A') * 2 + 14 * octave + 1;
                     int.TryParse(song.Substring(i, 3), out newTempo);
                 }
                 else
@@ -135,7 +183,7 @@ namespace Piano_UI
                     nd.streamIndex = -999;
                 }
                 nd.tickTime = durations[song[i + 2]];
-                noteeQueue.Add(nd);
+                noteQueue.Add(nd);
             }
         }
 
@@ -194,6 +242,7 @@ namespace Piano_UI
         private void button2_Click(object sender, EventArgs e)
         {
             // play
+            StringToQueue(SongEntry.Text);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -434,7 +483,8 @@ namespace Piano_UI
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
-            label2.Text = "TEMPO: " + trackBar1.Value.ToString("D3"); 
+            label2.Text = "TEMPO: " + trackBar1.Value.ToString("D3");
+            timerMetronome.Interval = (int)(18f);
         }
 
         private void button9_MouseDown_1(object sender, MouseEventArgs e)
@@ -459,6 +509,622 @@ namespace Piano_UI
                 long length = endTick - startTickCount;
                 SongEntry.AppendText("c4" + Quantize(length));
             }
+        }
+
+        private void timerMetronome_Tick(object sender, EventArgs e)
+        {
+            if (--metronomeTick <= 0)
+            {
+                if (metronomeTick == 0)
+                {
+                    soundOut.Stop();
+                }
+                if (noteQueue.Count > 0)
+                {
+                    if (noteQueue[0].tempoChange > 0)
+                    {
+                        trackBar1.Value = noteQueue[0].tempoChange;
+                        noteQueue.RemoveAt(0);
+                        if (noteQueue.Count == 0)
+                        {
+                            return;
+                        }
+                    }
+
+                    oddeven = !oddeven;
+
+                    if (noteQueue[0].streamIndex >= 0)
+                    {
+                        soundOut = noteWav[noteQueue[0].streamIndex + (oddeven ? 31 : 0)]; // C5 tries to index NoteWav with 26
+                        soundOut.Play();
+                        
+                    }
+                    metronomeTick = noteQueue[0].tickTime;
+                    noteQueue.RemoveAt(0);
+                }
+            }
+        }
+
+        private void button10_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.D4);
+            soundOut.Play();
+        }
+
+        private void button10_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("d4" + Quantize(length));
+            }
+        }
+
+        private void button11_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.E4);
+            soundOut.Play();
+        }
+
+        private void button11_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("e4" + Quantize(length));
+            }
+        }
+
+        private void button12_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.F4);
+            soundOut.Play();
+        }
+
+        private void button12_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("f4" + Quantize(length));
+            }
+        }
+
+        private void button13_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.G4);
+            soundOut.Play();
+        }
+
+        private void button13_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("g4" + Quantize(length));
+            }
+        }
+
+        private void button14_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.A4);
+            soundOut.Play();
+        }
+
+        private void button14_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("a4" + Quantize(length));
+            }
+        }
+
+        private void button15_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.B4);
+            soundOut.Play();
+        }
+
+        private void button15_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("b4" + Quantize(length));
+            }
+        }
+
+        private void button16_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.C5);
+            soundOut.Play();
+        }
+
+        private void button16_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("c5" + Quantize(length));
+            }
+        }
+
+        private void button17_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.D5);
+            soundOut.Play();
+        }
+
+        private void button17_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("d5" + Quantize(length));
+            }
+        }
+
+        private void button18_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.E5);
+            soundOut.Play();
+        }
+
+        private void button18_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("e5" + Quantize(length));
+            }
+        }
+
+        private void button19_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.F5);
+            soundOut.Play();
+        }
+
+        private void button19_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("f5" + Quantize(length));
+            }
+        }
+
+        private void button20_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.G5);
+            soundOut.Play();
+        }
+
+        private void button20_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("g5" + Quantize(length));
+            }
+        }
+
+        private void button21_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.A5);
+            soundOut.Play();
+        }
+
+        private void button21_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("a5" + Quantize(length));
+            }
+        }
+
+        private void button22_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.B5);
+            soundOut.Play();
+        }
+
+        private void button22_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("b5" + Quantize(length));
+            }
+        }
+
+        private void button23_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.C6);
+            soundOut.Play();
+        }
+
+        private void button23_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("c6" + Quantize(length));
+            }
+        }
+
+        private void button24_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.C4_);
+            soundOut.Play();
+        }
+
+        private void button24_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("C4" + Quantize(length));
+            }
+        }
+
+        private void button25_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.D4_);
+            soundOut.Play();
+        }
+
+        private void button25_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("D4" + Quantize(length));
+            }
+        }
+
+        private void button26_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.F4_);
+            soundOut.Play();
+        }
+
+        private void button26_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("F4" + Quantize(length));
+            }
+        }
+
+        private void button27_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.G4_);
+            soundOut.Play();
+        }
+
+        private void button27_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("G4" + Quantize(length));
+            }
+        }
+
+        private void button28_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.A4_);
+            soundOut.Play();
+        }
+
+        private void button28_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("A4" + Quantize(length));
+            }
+        }
+
+        private void button29_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.C5_);
+            soundOut.Play();
+        }
+
+        private void button29_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("C5" + Quantize(length));
+            }
+        }
+
+        private void button30_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.D5_);
+            soundOut.Play();
+        }
+
+        private void button30_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("D5" + Quantize(length));
+            }
+        }
+
+        private void button31_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.F5_);
+            soundOut.Play();
+        }
+
+        private void button31_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("F5" + Quantize(length));
+            }
+        }
+
+        private void button32_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.G5_);
+            soundOut.Play();
+        }
+
+        private void button32_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("G5" + Quantize(length));
+            }
+        }
+
+        private void button33_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (editMode_On) { return; }
+            if (recordMode_On)
+            {
+                startTickCount = Environment.TickCount + Int32.MaxValue;
+            }
+
+            soundOut.Stop();
+            soundOut = new SoundPlayer(Piano_UI.Properties.Resources.G5_);
+            soundOut.Play();
+        }
+
+        private void button33_MouseUp(object sender, MouseEventArgs e)
+        {
+            soundOut.Stop();
+            if (recordMode_On)
+            {
+                long endTick = Environment.TickCount + Int32.MaxValue;
+                long length = endTick - startTickCount;
+                SongEntry.AppendText("A5" + Quantize(length));
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            // rest
+            WriteNote("r0");
         }
     }
 }
